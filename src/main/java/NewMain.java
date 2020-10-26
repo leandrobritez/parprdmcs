@@ -33,7 +33,7 @@ public class NewMain {
         Category c =  new Category(1,"Aires");
 //        serviceC.add(c);
 //        System.out.println(daoC.getAll());
-          serviceC.update(c);
+          System.out.println(service.findByName("subarus"));
 //        System.out.println(daoC.contains(2));
 //        System.out.println(daoC.contains(1));
 //        Product p = new Product(4,"subaru",c,Long.valueOf("5000"),4);

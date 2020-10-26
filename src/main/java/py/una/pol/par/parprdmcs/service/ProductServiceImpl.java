@@ -5,6 +5,7 @@
  */
 package py.una.pol.par.parprdmcs.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import py.una.pol.par.commons.entity.Entity;
@@ -22,8 +23,8 @@ public class ProductServiceImpl extends BaseService<Product, Integer> implements
 
     private ProductRepository<Product, Integer> productRepository;
     private CategoryRepository<Category, Integer> categoryRepository;
-    
-    public ProductServiceImpl(ProductRepository<Product, Integer> productRepository,CategoryRepository<Category, Integer> categoryRepository) {
+
+    public ProductServiceImpl(ProductRepository<Product, Integer> productRepository, CategoryRepository<Category, Integer> categoryRepository) {
         super(productRepository);
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
@@ -43,23 +44,40 @@ public class ProductServiceImpl extends BaseService<Product, Integer> implements
     public Entity findById(Integer id) throws Exception {
         Product product = (Product) productRepository.get(id);
         product.setCategory((Category) categoryRepository.get(product.getCategory().getId()));
-        
+
         return product;
     }
 
     /**
      *
-     * @return
-     * @throws Exception
+     * @return @throws Exception
      */
-
+    @Override
     public Collection<Product> getAlls() throws Exception {
         List<Product> products = (List<Product>) productRepository.getAll();
-        for(int i = 0 ; i < products.size() ; i++){
+        for (int i = 0; i < products.size(); i++) {
             products.get(i).setCategory((Category) categoryRepository.get(products.get(i).getCategory().getId()));
         }
-     
+
         return products;
+    }
+
+    @Override
+    public Collection<Product> getProductByCategory(String categoryName) throws Exception {
+        List<Product> products = (List<Product>) productRepository.getAll();
+        for (int i = 0; i < products.size(); i++) {
+            products.get(i).setCategory((Category) categoryRepository.get(products.get(i).getCategory().getId()));
+        }
+        List<Product> response = new ArrayList();
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getCategory().getName().trim().equals(categoryName)) {
+                response.add(products.get(i));
+            }
+
+        }
+        
+          return response;
+        
     }
 
     @Override
@@ -68,18 +86,33 @@ public class ProductServiceImpl extends BaseService<Product, Integer> implements
             throw new Exception("El nombre del producto no puede ser nulo o cadena vacia.");
         }
 
-        if (product.getCategory() == null ) {
+        if (product.getCategory() == null) {
             throw new Exception("La categoria no puede ser Nula");
         }
 
-        if(categoryRepository.contains(product.getCategory().getId())){
+        if (categoryRepository.contains(product.getCategory().getId())) {
             super.add(product);
-            
-        }else{
-           throw new Exception("No existe id de categoria");
+
+        } else {
+            throw new Exception("No existe id de categoria");
         }
-        
-        
+
+    }
+
+    @Override
+    public Entity findByName(String productName) throws Exception {
+        List<Product> products = (List<Product>) productRepository.getAll();
+        Product response = new Product();
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getName().trim().equals(productName)) {
+                response = products.get(i);
+                response.setCategory((Category) categoryRepository.get(response.getCategory().getId()));
+            }
+
+        }
+
+        return response;
+
     }
 
 }

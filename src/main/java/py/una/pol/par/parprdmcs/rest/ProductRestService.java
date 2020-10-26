@@ -39,9 +39,20 @@ public class ProductRestService {
         @Path("/categories/products")
         @Produces("application/json")
         public ArrayList<Product> getProducts() throws Exception {
-            ArrayList<Product> products = (ArrayList) productService.getAll();
+            ArrayList<Product> products = (ArrayList) productService.getAlls();
             return products;
         }
+        
+        @GET
+        @Path("/categories/products/category/{categoryName}")
+        @Produces("application/json")
+        public ArrayList<Product> getProductsByCategory(@PathParam("categoryName") String categoryName) throws Exception {
+           
+            ArrayList<Product> products = (ArrayList) productService.getProductByCategory(categoryName);
+            
+            return products;
+        }
+
 
         @GET
         @Path("/categories/products/{id}")
@@ -50,6 +61,19 @@ public class ProductRestService {
             Product entity = null;
             try {
                 entity = (Product) productService.findById(id);
+            } catch (Exception ex) {
+                Logger.getLogger(ProductRestService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return entity;
+        }
+        
+        @GET
+        @Path("/categories/products/name/{name}")
+        @Produces("application/json")
+        public Product getProductByName(@PathParam("name") String name) {
+            Product entity = null;
+            try {
+                entity = (Product) productService.findByName(name);
             } catch (Exception ex) {
                 Logger.getLogger(ProductRestService.class.getName()).log(Level.SEVERE, null, ex);
             }

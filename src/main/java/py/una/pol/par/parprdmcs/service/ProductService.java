@@ -24,6 +24,13 @@ public interface ProductService {
     public Entity findById(Integer id) throws Exception;
 
     public Collection<Product> getAll() throws Exception;
-
+    
+    public Collection<Product> getAlls() throws Exception;
+    
+    public Collection<Product> getProductByCategory(String categoryName) throws Exception;
+    
     public void addProduct(Product product) throws Exception;
+    
+    public Entity findByName(String productName) throws Exception;
+    
 }
